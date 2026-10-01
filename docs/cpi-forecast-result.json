@@ -1,0 +1,90 @@
+{
+  "status": "trained",
+  "selected_model": "ridge",
+  "training_rows": 96,
+  "holdout_rows": 12,
+  "holdout_start": "2025-07-01",
+  "metrics": {
+    "seasonal_naive": {
+      "mae": 18.558333333333326,
+      "rmse": 19.84235789080185,
+      "mape_percent": 6.507101105435481,
+      "mape_eligible_rows": 12
+    },
+    "ridge": {
+      "mae": 16.086842449599374,
+      "rmse": 17.800705118990592,
+      "mape_percent": 5.624722644639938,
+      "mape_eligible_rows": 12,
+      "cv_one_step_mae": 11.148390037204814,
+      "parameters": {
+        "model__alpha": 1.0
+      }
+    },
+    "random_forest": {
+      "mae": 18.192182701326505,
+      "rmse": 19.741021606287337,
+      "mape_percent": 6.369605414254882,
+      "mape_eligible_rows": 12,
+      "cv_one_step_mae": 25.38334920634909,
+      "parameters": {
+        "model__max_depth": 6
+      }
+    },
+    "hist_gradient_boosting": {
+      "mae": 20.589573472254187,
+      "rmse": 21.96550661688011,
+      "mape_percent": 7.218595020658587,
+      "mape_eligible_rows": 12,
+      "cv_one_step_mae": 44.68389819581972,
+      "parameters": {
+        "model__max_leaf_nodes": 7
+      }
+    }
+  },
+  "forecast": [
+    {
+      "period": "2026-07-01",
+      "value": 296.50793459317003
+    },
+    {
+      "period": "2026-08-01",
+      "value": 299.21831678197304
+    },
+    {
+      "period": "2026-09-01",
+      "value": 301.60021685030154
+    },
+    {
+      "period": "2026-10-01",
+      "value": 304.17911209563346
+    },
+    {
+      "period": "2026-11-01",
+      "value": 306.9124287629541
+    },
+    {
+      "period": "2026-12-01",
+      "value": 309.3651511000501
+    }
+  ],
+  "limitations": [
+    "Statistical estimates; no guaranteed economic prediction.",
+    "Model selection uses holdout; results are exploratory and require a later untouched evaluation.",
+    "CV scores measure one-step predictions; outer holdout measures recursive forecasts."
+  ],
+  "provenance": {
+    "warehouse": "data/warehouse.duckdb",
+    "dataset": "pbs_price_indices",
+    "indicator": "cpi_national",
+    "geography": "Pakistan",
+    "unit": "index_2015_16_100",
+    "source_urls": [
+      "https://www.pbs.gov.pk/wp-content/uploads/2020/07/indices_and_growth_rates_historical-1.pdf"
+    ],
+    "period_start": "2017-07-01",
+    "period_end": "2026-06-01",
+    "observations": 108
+  },
+  "generated_at": "2026-10-01T06:04:04.955060+00:00"
+}

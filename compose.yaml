@@ -1,0 +1,29 @@
+services:
+  api:
+    build: {context: ., dockerfile: infra/api.Dockerfile}
+    ports: ["8000:8000"]
+    environment:
+      PAKDATA_DATA_DIR: /data
+      PAKDATA_REDIS_URL: redis://redis:6379/0
+      PAKDATA_CORS_ORIGINS: http://localhost:3000
+    volumes: ["./data:/data:ro"]
+    depends_on: [redis]
+    restart: unless-stopped
+  web:
+    build: {context: ., dockerfile: infra/web.Dockerfile}
+    ports: ["3000:3000"]
+    depends_on: [api]
+  redis:
+    image: redis:7-alpine
+    command: [redis-server, --maxmemory, 64mb, --maxmemory-policy, allkeys-lru]
+  postgres:
+    image: postgres:17-alpine
+    profiles: [warehouse]
+    environment:
+      POSTGRES_DB: pakdata
+      POSTGRES_USER: pakdata
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    ports: ["127.0.0.1:5432:5432"]
+    volumes: ["postgres:/var/lib/postgresql/data"]
+volumes:
+  postgres:

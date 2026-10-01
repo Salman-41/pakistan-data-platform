@@ -1,0 +1,7 @@
+{
+  "rows": 738,
+  "database_bytes": 2371584,
+  "aggregate_seconds": 0.00402737399997477,
+  "peak_process_rss_kib": 53780,
+  "scope": "local real PBS sample; not representative of million-row performance"
+}
