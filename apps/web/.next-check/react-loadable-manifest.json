@@ -1,0 +1,47 @@
+{
+  "app/page.tsx -> ../components/map": {
+    "id": 7981,
+    "files": [
+      "static/css/7dfd643b849ac952.css",
+      "static/chunks/05f6971a.d29fb8c443c49c52.js",
+      "static/chunks/981.36781a00ea2cfb64.js"
+    ]
+  },
+  "app/page.tsx -> ../components/national-dashboard": {
+    "id": 5429,
+    "files": [
+      "static/chunks/429.451c1fd56ed9c857.js"
+    ]
+  },
+  "app/page.tsx -> ../components/sector-dashboard": {
+    "id": 2368,
+    "files": [
+      "static/chunks/429.451c1fd56ed9c857.js",
+      "static/chunks/368.c7051f070488e786.js"
+    ]
+  },
+  "components/dashboards.tsx -> ./chart": {
+    "id": 5083,
+    "files": [
+      "static/chunks/643.50d3d0bd88ddc120.js",
+      "static/chunks/844.2fb8c550415cb613.js",
+      "static/chunks/83.c5a8e006c735fffe.js"
+    ]
+  },
+  "components/national-dashboard.tsx -> ./visual": {
+    "id": 1890,
+    "files": [
+      "static/chunks/643.50d3d0bd88ddc120.js",
+      "static/chunks/52.e641167d152fab9a.js",
+      "static/chunks/509.0df3687a3f31c3a8.js"
+    ]
+  },
+  "components/sector-dashboard.tsx -> ./visual": {
+    "id": 1890,
+    "files": [
+      "static/chunks/643.50d3d0bd88ddc120.js",
+      "static/chunks/52.e641167d152fab9a.js",
+      "static/chunks/509.0df3687a3f31c3a8.js"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+'use client';
+
+import {useState} from 'react';
+import {ArrowUpRight,ArrowRight,MapPin,Layers3,Users,MoveUpRight} from 'lucide-react';
+import paths from '../lib/pakistan-paths.json';
+import {latest,formatValue,type Observation} from '../lib/data';
+
+const places=['Punjab','Sindh','Khyber Pakhtunkhwa','Balochistan','Islamabad','Gilgit-Baltistan','Azad Kashmir'];
+const labels:Record<string,[number,number,string]>={Punjab:[470,280,'PUNJAB'],Sindh:[330,495,'SINDH'],Balochistan:[210,350,'BALOCHISTAN'],'Khyber Pakhtunkhwa':[440,180,'KP'],'Gilgit-Baltistan':[550,85,'GILGIT-BALTISTAN'],'Azad Kashmir':[535,190,'AJK']};
+export default function PakistanExplorer({rows,navigate}:{rows:Observation[];navigate:(tab:string)=>void}){
+ const [selected,setSelected]=useState('Punjab');
+ const [hovered,setHovered]=useState<string|null>(null);
+ const [layer,setLayer]=useState('Population');
+ const [compare,setCompare]=useState(false);
+ const place=hovered??selected;
+ const indicator=layer==='Population'?'population':'population_growth_annual';
+ const record=latest(rows,indicator,place);
+ const total=latest(rows,'population');
+ const population=latest(rows,'population',place);
+ const previous=rows.filter(r=>r.indicator==='population'&&r.geography===place&&r.period<(population?.period??'')).sort((a,b)=>a.period.localeCompare(b.period)).at(-1);
+ const available=places.map(name=>({name,row:latest(rows,indicator,name)})).filter(x=>x.row).sort((a,b)=>b.row!.value-a.row!.value);
+ const max=Math.max(...available.map(x=>x.row!.value),1);
+ return <section className="atlas" aria-label="Interactive Pakistan province explorer">
+  <div className="atlas-story"><div className="atlas-kicker"><span/> THE NATIONAL PICTURE</div><h2>One country.<br/><em>Millions of stories.</em></h2><p>Explore the places and people shaping Pakistan. A new perspective, province by province.</p><div className="atlas-total"><span>Published census population</span><strong>{formatValue(total?.value)}<small>people</small></strong><div>{total?`${total.period.slice(0,4)} census · Pakistan Bureau of Statistics`:'No census observations in this filter'}</div></div><button className="atlas-cta" onClick={()=>navigate('Population')}>Explore population <ArrowUpRight size={18}/></button><div className="atlas-bottom"><span>01 /</span> A closer look at Pakistan</div></div>
+  <div className="atlas-map"><div className="atlas-map-toolbar"><span><Layers3 size={14}/> DATA LAYER</span><div>{['Population','Growth'].map(x=><button key={x} aria-pressed={layer===x} className={layer===x?'active':''} onClick={()=>setLayer(x)}>{x}</button>)}</div></div>
+   <svg viewBox="0 0 690 620" className="province-map" aria-label="Pakistan provinces and territories"><defs><filter id="map-glow"><feGaussianBlur stdDeviation="9"/></filter></defs><g className="map-shadow" transform="translate(0 10)">{Object.entries(paths).map(([name,d])=><path key={name} d={d}/>)}</g>{Object.entries(paths).map(([name,d])=>{const r=latest(rows,indicator,name);return <path key={name} d={d} tabIndex={0} role="button" aria-label={`Preview ${name}`} aria-pressed={selected===name} className={`province ${place===name?'active':''} ${r?'has-data':'no-data'}`} style={{'--province-opacity':r?String(.3+Math.min(r.value/max,1)*.6):'.18'} as React.CSSProperties} onMouseEnter={()=>setHovered(name)} onMouseLeave={()=>setHovered(null)} onFocus={()=>setHovered(name)} onBlur={()=>setHovered(null)} onClick={()=>setSelected(name)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();setSelected(name)}}}><title>{name}: {r?`${formatValue(r.value,r.unit)} · ${r.period.slice(0,4)}`:'No published coverage'}</title></path>})}{Object.entries(labels).map(([name,[x,y,label]])=><text key={name} x={x} y={y} className={place===name?'active-label':''}>{label}</text>)}<circle cx="474" cy="217" r="4" className="capital-dot"/><text x="489" y="218" className="capital-label">Islamabad</text></svg>
+   <div className="atlas-map-note"><span className="map-scale"/> {layer==='Population'?'Lower population → higher population':'Lower growth → higher growth'}<span>Hover to preview · click to select</span></div><a className="map-credit" href="https://github.com/PakData/GISData" target="_blank" rel="noreferrer">Boundary geometry: PakData / GADM · FATA grouped with KP</a>
+  </div>
+  <div className="atlas-detail"><div className="atlas-detail-top"><span><span className="status-dot"/> INSTANT PREVIEW</span><MapPin size={17}/></div><label className="province-picker">Province / territory<select aria-label="Select province" value={selected} onChange={e=>setSelected(e.target.value)}>{places.map(p=><option key={p}>{p}</option>)}</select></label><div className="province-reading" aria-live="polite"><span>{place}</span><strong>{formatValue(record?.value,record?.unit)}</strong><small>{layer==='Population'?'Published population':'Published annual population growth'} · {record?.period.slice(0,4)??'no coverage'}</small></div><div className="province-facts"><div><span>Share of national census</span><strong>{population&&total&&population.period===total.period?`${(population.value/total.value*100).toFixed(1)}%`:'—'}</strong></div><div><span>Previous census{previous?` · ${previous.period.slice(0,4)}`:''}</span><strong>{formatValue(previous?.value)}</strong></div></div><button className="compare-toggle" aria-pressed={compare} onClick={()=>setCompare(!compare)}><Users size={15}/>{compare?'Close comparison':'Compare provinces'}<ArrowRight size={15}/></button>{compare?<div className="province-comparison">{available.map(x=><button key={x.name} onClick={()=>setSelected(x.name)}><span>{x.name}<b>{formatValue(x.row?.value,x.row?.unit)}</b></span><i style={{width:`${x.row!.value/max*100}%`}}/></button>)}{!available.length&&<p>No provincial observations in this filter.</p>}</div>:<div className="atlas-insight"><MoveUpRight size={22}/><p>{population&&total&&population.period===total.period?<><strong>{(population.value/total.value*100).toFixed(1)}% of Pakistan’s census population</strong> lives in {place}.</>:<>Select a province to explore its published census coverage.</>}</p></div>}<button className="atlas-detail-link" onClick={()=>navigate('Geographies')}>Open geography explorer <ArrowUpRight size={14}/></button></div>
+ </section>
+}
