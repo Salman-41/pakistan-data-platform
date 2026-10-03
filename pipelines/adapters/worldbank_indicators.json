@@ -1,0 +1,94 @@
+{
+  "economy": [
+    ["NY.GDP.MKTP.CD", "gdp_current_usd", "GDP", "current_usd"],
+    ["NY.GDP.PCAP.CD", "gdp_per_capita_usd", "GDP per capita", "current_usd_per_person"],
+    ["NY.GDP.MKTP.KD.ZG", "gdp_growth", "GDP growth", "percent"],
+    ["FP.CPI.TOTL.ZG", "inflation_annual", "Consumer price inflation", "percent"],
+    ["NY.GNP.PCAP.CD", "gni_per_capita_usd", "GNI per capita, Atlas method", "current_usd_per_person"],
+    ["NE.GDI.TOTL.ZS", "investment_share", "Gross capital formation", "percent_gdp"],
+    ["BX.KLT.DINV.CD.WD", "fdi_net_inflows_usd", "Foreign direct investment, net inflows", "current_usd"],
+    ["BX.TRF.PWKR.CD.DT", "remittances_usd", "Personal remittances received", "current_usd"],
+    ["BN.CAB.XOKA.CD", "current_account_usd", "Current account balance", "current_usd"],
+    ["FI.RES.TOTL.CD", "reserves_usd", "Total reserves including gold", "current_usd"],
+    ["PA.NUS.FCRF", "exchange_rate_pkr_usd", "Official exchange rate", "pkr_per_usd"]
+  ],
+  "trade": [
+    ["NE.EXP.GNFS.CD", "exports_usd", "Exports of goods and services", "current_usd"],
+    ["NE.IMP.GNFS.CD", "imports_usd", "Imports of goods and services", "current_usd"],
+    ["NE.EXP.GNFS.ZS", "exports_share", "Exports of goods and services", "percent_gdp"],
+    ["NE.IMP.GNFS.ZS", "imports_share", "Imports of goods and services", "percent_gdp"],
+    ["NE.TRD.GNFS.ZS", "trade_share", "Trade openness", "percent_gdp"],
+    ["TX.VAL.MRCH.CD.WT", "merchandise_exports_usd", "Merchandise exports", "current_usd"],
+    ["TM.VAL.MRCH.CD.WT", "merchandise_imports_usd", "Merchandise imports", "current_usd"]
+  ],
+  "population": [
+    ["SP.POP.TOTL", "population_total", "Population estimate", "persons"],
+    ["SP.POP.GROW", "population_growth", "Population growth", "percent"],
+    ["SP.URB.TOTL.IN.ZS", "urban_population_share_wdi", "Urban population share", "percent"],
+    ["EN.POP.DNST", "population_density_wdi", "Population density", "persons_per_sq_km"],
+    ["SP.POP.0014.TO.ZS", "population_under_15_share", "Population aged 0–14", "percent"],
+    ["SP.POP.65UP.TO.ZS", "population_over_65_share", "Population aged 65 and above", "percent"],
+    ["SP.DYN.TFRT.IN", "fertility_rate", "Fertility rate", "births_per_woman"],
+    ["SP.POP.TOTL.FE.ZS", "female_population_share", "Female population share", "percent"]
+  ],
+  "agriculture": [
+    ["NV.AGR.TOTL.ZS", "agriculture_value_added_share", "Agriculture, forestry and fishing", "percent_gdp"],
+    ["NV.AGR.TOTL.CD", "agriculture_value_added_usd", "Agriculture value added", "current_usd"],
+    ["AG.PRD.CREL.MT", "cereal_production", "Cereal production", "tonnes"],
+    ["AG.YLD.CREL.KG", "cereal_yield", "Cereal yield", "kg_per_hectare"],
+    ["AG.LND.AGRI.ZS", "agricultural_land_share", "Agricultural land", "percent_land_area"],
+    ["AG.LND.ARBL.ZS", "arable_land_share", "Arable land", "percent_land_area"],
+    ["NV.IND.TOTL.ZS", "industry_value_added_share", "Industry including construction", "percent_gdp"],
+    ["NV.SRV.TOTL.ZS", "services_value_added_share", "Services value added", "percent_gdp"]
+  ],
+  "labour": [
+    ["SL.UEM.TOTL.ZS", "unemployment_rate_modelled", "Unemployment, ILO modelled estimate", "percent_labour_force"],
+    ["SL.UEM.1524.ZS", "youth_unemployment_modelled", "Youth unemployment, ILO modelled estimate", "percent_youth_labour_force"],
+    ["SL.TLF.CACT.ZS", "labour_participation_modelled", "Labour participation, ages 15+, ILO modelled", "percent_population_15plus"],
+    ["SL.TLF.CACT.FE.ZS", "female_labour_participation_modelled", "Female labour participation, ILO modelled", "percent_female_population_15plus"],
+    ["SL.TLF.CACT.MA.ZS", "male_labour_participation_modelled", "Male labour participation, ILO modelled", "percent_male_population_15plus"],
+    ["SL.EMP.TOTL.SP.ZS", "employment_ratio_modelled", "Employment to population, ages 15+, ILO modelled", "percent_population_15plus"],
+    ["SL.AGR.EMPL.ZS", "agriculture_employment_share", "Employment in agriculture, ILO modelled", "percent_employment"]
+  ],
+  "energy": [
+    ["EG.ELC.ACCS.ZS", "electricity_access", "Access to electricity", "percent_population"],
+    ["EG.ELC.ACCS.RU.ZS", "rural_electricity_access", "Rural access to electricity", "percent_rural_population"],
+    ["EG.ELC.ACCS.UR.ZS", "urban_electricity_access", "Urban access to electricity", "percent_urban_population"],
+    ["EG.CFT.ACCS.ZS", "clean_cooking_access", "Access to clean cooking fuels and technologies", "percent_population"],
+    ["EG.FEC.RNEW.ZS", "renewable_energy_share", "Renewable energy consumption", "percent_final_energy"],
+    ["EG.USE.ELEC.KH.PC", "electricity_consumption_per_capita", "Electric power consumption", "kwh_per_person"],
+    ["TM.VAL.FUEL.ZS.UN", "fuel_imports_share", "Fuel imports", "percent_merchandise_imports"]
+  ],
+  "health": [
+    ["SP.DYN.LE00.IN", "life_expectancy", "Life expectancy at birth", "years"],
+    ["SH.DYN.MORT", "under_five_mortality", "Under-five mortality", "deaths_per_1000_live_births"],
+    ["SP.DYN.IMRT.IN", "infant_mortality", "Infant mortality", "deaths_per_1000_live_births"],
+    ["SH.XPD.CHEX.GD.ZS", "health_expenditure_share", "Current health expenditure", "percent_gdp"],
+    ["SH.IMM.MEAS", "measles_immunization", "Measles immunization, ages 12–23 months", "percent_children"],
+    ["SH.MED.PHYS.ZS", "physicians_density", "Physicians", "per_1000_people"],
+    ["SH.H2O.BASW.ZS", "basic_water_access", "Access to basic drinking water services", "percent_population"],
+    ["SH.STA.BASS.ZS", "basic_sanitation_access", "Access to basic sanitation services", "percent_population"]
+  ],
+  "education": [
+    ["SE.ADT.LITR.ZS", "adult_literacy", "Adult literacy, ages 15+", "percent_population_15plus"],
+    ["SE.ADT.LITR.FE.ZS", "female_adult_literacy", "Female adult literacy, ages 15+", "percent_female_population_15plus"],
+    ["SE.PRM.ENRR", "primary_enrollment_gross", "Primary school enrollment, gross", "percent_gross_enrollment"],
+    ["SE.SEC.ENRR", "secondary_enrollment_gross", "Secondary school enrollment, gross", "percent_gross_enrollment"],
+    ["SE.TER.ENRR", "tertiary_enrollment_gross", "Tertiary enrollment, gross", "percent_gross_enrollment"],
+    ["SE.XPD.TOTL.GD.ZS", "education_expenditure_share", "Government education expenditure", "percent_gdp"],
+    ["SE.PRM.CMPT.ZS", "primary_completion_rate", "Primary completion rate", "percent_relevant_age_group"]
+  ],
+  "environment": [
+    ["AG.LND.FRST.ZS", "forest_area_share", "Forest area", "percent_land_area"],
+    ["AG.LND.FRST.K2", "forest_area", "Forest area", "sq_km"],
+    ["ER.H2O.FWAG.ZS", "agriculture_water_withdrawals", "Agricultural freshwater withdrawals", "percent_total_withdrawals"],
+    ["ER.H2O.FWTL.ZS", "freshwater_withdrawals", "Annual freshwater withdrawals", "percent_internal_resources"],
+    ["EN.ATM.PM25.MC.M3", "pm25_exposure", "Mean annual PM2.5 exposure", "micrograms_per_cubic_meter"]
+  ],
+  "digital": [
+    ["IT.NET.USER.ZS", "internet_access", "Individuals using the internet", "percent_population"],
+    ["IT.CEL.SETS.P2", "mobile_subscriptions", "Mobile cellular subscriptions", "per_100_people"],
+    ["IT.NET.BBND.P2", "fixed_broadband_subscriptions", "Fixed broadband subscriptions", "per_100_people"],
+    ["IT.NET.SECR.P6", "secure_internet_servers", "Secure internet servers", "per_million_people"]
+  ]
+}

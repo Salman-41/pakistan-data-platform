@@ -13,6 +13,7 @@ mlruns/
 *.tsbuildinfo
 node_modules/
 .next/
+.next-build/
 out/
 test-results/
 playwright-report/

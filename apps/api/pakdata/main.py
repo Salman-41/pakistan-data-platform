@@ -84,6 +84,25 @@ def health():
 def indicators():
     return available(query('SELECT dataset,indicator,unit,frequency,geography,MIN(period) AS start,MAX(period) AS end,COUNT(*) AS observations FROM fact_observation GROUP BY ALL ORDER BY indicator,geography'))
 
+@app.get('/api/v1/workspace')
+def workspace():
+    """Bounded analytical snapshot with indicator definitions and explicit coverage."""
+    rows = query('SELECT dataset,indicator,geography,period,value,unit,frequency,source_url FROM fact_observation ORDER BY period,indicator,geography LIMIT 20001')
+    if len(rows) > 20000:
+        raise HTTPException(422, 'Workspace snapshot exceeds 20,000 rows; use the paginated domain endpoints.')
+    metadata = artifact('indicator_metadata.json') or {}
+    for row in rows:
+        key = row['indicator']
+        if key not in metadata:
+            metadata[key] = {'title': key.replace('_', ' ').title(), 'domain': 'inflation' if key.startswith('cpi_') or key == 'wpi' else 'population', 'source': 'Pakistan Bureau of Statistics', 'unit': row['unit'], 'source_url': row['source_url'], 'definition': 'Published source observations. Census annual dates represent census-year labels; census boundaries may differ between years.' if 'census' in row['dataset'] else 'Published price index, base 2015–16 = 100; index levels are distinct from percentage inflation rates.'}
+    dates = [r['period'] for r in rows]
+    return {**available(rows), 'metadata': metadata, 'coverage': {
+        'observations': len(rows), 'indicators': len({r['indicator'] for r in rows}),
+        'datasets': len({r['dataset'] for r in rows}), 'geographies': len({r['geography'] for r in rows}),
+        'start': min(dates) if dates else None, 'end': max(dates) if dates else None,
+        'national_observations': sum(r['geography'] == 'Pakistan' for r in rows),
+    }}
+
 @app.get('/api/v1/economy/timeseries')
 def timeseries(indicator: str = Query(..., max_length=160), geography: str = Query('Pakistan', max_length=160), dataset: str | None = Query(None, max_length=160), start: str | None = Query(None, pattern=r'^\d{4}(-\d{2})?(-\d{2})?$'), end: str | None = Query(None, pattern=r'^\d{4}(-\d{2})?(-\d{2})?$'), frequency: str | None = Query(None, max_length=32), transform: Literal['raw','pct_change','rolling_mean','index'] = 'raw', window: int = Query(3, ge=2, le=120), limit: int = Query(500, ge=1, le=5000), offset: int = Query(0, ge=0)):
     clauses=['indicator=?','geography=?']
@@ -116,7 +135,16 @@ def geography():
 
 @app.get('/api/v1/catalog')
 def catalog():
-    return available([json.loads(p.read_text()) for p in sorted((DATA_DIR/'manifests').glob('*.json'))])
+    # Present the latest ingestion for each publication; quality retains the audit history.
+    publications = {}
+    for path in sorted((DATA_DIR/'manifests').glob('*.json')):
+        record = json.loads(path.read_text())
+        key = record['source_url']
+        if key not in publications or record.get('completed_at', '') > publications[key].get('completed_at', ''):
+            filename = Path(record.get('original_file', '')).stem
+            record['title'] = ('World Development Indicators · ' + filename.title()) if record['source'].startswith('World Bank') else ('Census 2023 · ' + filename.removeprefix('table_1_').replace('_', ' ').title()) if filename.startswith('table_1_') else 'Monthly consumer and wholesale price indices'
+            publications[key] = record
+    return available(sorted(publications.values(), key=lambda r: (r['source'], r.get('title', ''))))
 
 @app.get('/api/v1/quality')
 def quality():
@@ -137,14 +165,14 @@ def compare(indicator_a: str, indicator_b: str, geography: str='Pakistan', start
         correlations={'pearson':float(p.statistic),'pearson_p':float(p.pvalue),'spearman':float(s.statistic),'spearman_p':float(s.pvalue),'n':len(frame)}
     return {**available(json.loads(frame.to_json(orient='records'))),'correlation':correlations,'caveat':'Associations are not causation. Serial dependence can invalidate ordinary correlation p-values; matched observed periods only.'}
 
-DOMAINS={'trade':('trade','export','import'), 'population':('population','census'), 'agriculture':('agriculture','crop','yield'), 'labour':('labour','employment','unemployment'), 'energy':('energy','electricity','generation')}
+DOMAINS={'trade':('trade','export','import'), 'population':('population','census'), 'agriculture':('agriculture','crop','yield'), 'labour':('labour','employment','unemployment'), 'energy':('energy','electricity','generation'), 'health':('worldbank_health',), 'education':('worldbank_education',), 'environment':('worldbank_environment',), 'digital':('worldbank_digital',)}
 def domain_data(domain: str, limit: int, offset: int):
     terms=DOMAINS[domain]
     clauses=' OR '.join(['(lower(dataset) LIKE ? OR lower(indicator) LIKE ?)']*len(terms))
     args=[x for term in terms for x in ('%'+term+'%','%'+term+'%')]
     return available(query('SELECT * FROM fact_observation WHERE '+clauses+' ORDER BY period DESC LIMIT ? OFFSET ?', args+[limit,offset]))
 def domain_endpoint(domain):
-    def endpoint(limit: int=Query(100,ge=1,le=1000),offset: int=Query(0,ge=0)):
+    def endpoint(limit: int=Query(100,ge=1,le=5000),offset: int=Query(0,ge=0)):
         return domain_data(domain,limit,offset)
     return endpoint
 for domain in DOMAINS:
