@@ -66,7 +66,7 @@ npm ci
 npm run dev
 ```
 
-Application: http://localhost:3000. API docs: http://localhost:8000/docs. Copy `.env.example` only when configuring optional services; shell processes must explicitly load environment variables. Annual census dates are normalized year labels, not exact enumeration dates. Download adapters fail when publisher formats change.
+Application: use the URL printed by Next.js (normally http://localhost:3000; port 3001 if 3000 is occupied). Browser API requests use the same-origin `/backend` proxy, so alternate web ports work without changing CORS. For a custom API host, set `PAKDATA_API_URL` in `apps/web/.env.local` and restart Next.js. `NEXT_PUBLIC_API_URL` is an optional direct-browser override and requires matching API CORS configuration. API docs: http://localhost:8000/docs. Copy `.env.example` only when configuring optional services; shell processes must explicitly load environment variables. Annual census dates are normalized year labels, not exact enumeration dates. Download adapters fail when publisher formats change.
 
 ## Docker
 
